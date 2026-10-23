@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1850" viewBox="0 0 1200 1850" role="img" aria-labelledby="title desc">
+<title id="title">项目工作流程图</title>
+<desc id="desc">七步依次为选题审核、查证写稿、生成图片、整理素材与排期、上传填写、人工审核发布、结果复盘。每步标明工具和交付物。</desc>
+<rect width="100%" height="100%" fill="white"/>
+<text x="80" y="94" font-family="Microsoft YaHei, sans-serif" font-size="58" font-weight="700" fill="#1f2933">项目工作流程图</text>
+<text x="80" y="148" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#4b5563">Codex 安排任务，Easel 展示内容与排期</text>
+<text x="80" y="185" font-family="Microsoft YaHei, sans-serif" font-size="23" font-weight="400" fill="#4b5563">箭头只表示交接顺序；各步由人工或脚本按需启动</text>
+<rect x="80" y="215" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="278" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">1. 选题审核</text>
+<text x="901" y="273" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">创作者 + 飞书</text>
+<text x="112" y="341" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：审核通过的选题与计划时间</text>
+<path d="M600 383V407" stroke="#526575" stroke-width="4"/><path d="M590 403L610 403L600 417Z" fill="#526575"/>
+<rect x="80" y="425" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="488" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">2. 查证与写稿</text>
+<text x="933" y="483" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">Antigravity</text>
+<text x="112" y="551" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：标题、正文、标签及制作说明</text>
+<path d="M600 593V617" stroke="#526575" stroke-width="4"/><path d="M590 613L610 613L600 627Z" fill="#526575"/>
+<rect x="80" y="635" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="698" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">3. 生成图片</text>
+<text x="809" y="693" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">ChatGPT + 生图规范</text>
+<text x="112" y="761" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：单图或套图；逐页核对内容</text>
+<path d="M600 803V827" stroke="#526575" stroke-width="4"/><path d="M590 823L610 823L600 837Z" fill="#526575"/>
+<rect x="80" y="845" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="908" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">4. 整理素材与排期</text>
+<text x="890" y="903" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">Codex + Easel</text>
+<text x="112" y="971" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：文案、有序图片 / 视频与上传清单</text>
+<path d="M600 1013V1037" stroke="#526575" stroke-width="4"/><path d="M590 1033L610 1033L600 1047Z" fill="#526575"/>
+<rect x="80" y="1055" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="1118" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">5. 上传和填写</text>
+<text x="792" y="1113" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">Chrome + 浏览器工具</text>
+<text x="112" y="1181" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：已填好的编辑页，尚未提交</text>
+<path d="M600 1223V1247" stroke="#526575" stroke-width="4"/><path d="M590 1243L610 1243L600 1257Z" fill="#526575"/>
+<rect x="80" y="1265" width="1040" height="160" rx="12" fill="#fff4dc" stroke="#cda952" stroke-width="2"/>
+<text x="112" y="1328" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">6. 人工审核与发布</text>
+<text x="999" y="1323" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">创作者</text>
+<text x="112" y="1391" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">检查内容、声明和时间，再亲自点击发布</text>
+<path d="M600 1433V1457" stroke="#526575" stroke-width="4"/><path d="M590 1453L610 1453L600 1467Z" fill="#526575"/>
+<rect x="80" y="1475" width="1040" height="160" rx="12" fill="#f6f8fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="112" y="1538" font-family="Microsoft YaHei, sans-serif" font-size="43" font-weight="700" fill="#1f2933">7. 登记结果并复盘</text>
+<text x="843" y="1533" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#425466">创作者 + 项目记录</text>
+<text x="112" y="1601" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="400" fill="#1f2933">输出：平台状态、内容数据和后续选题</text>
+<rect x="80" y="1670" width="1040" height="128" rx="12" fill="#eef5fa" stroke="#b6c1ca" stroke-width="2"/>
+<text x="110" y="1717" font-family="Microsoft YaHei, sans-serif" font-size="31" font-weight="700" fill="#1f2933">视频支线（按需）</text>
+<text x="110" y="1765" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#1f2933">图卡与文案 → Remotion / FFmpeg → MP4 → 第 4 步</text>
+</svg>

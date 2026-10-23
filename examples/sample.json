@@ -1,0 +1,14 @@
+{
+  "public_number": "K.0001",
+  "publish_at": "2030-01-01T09:00:00+08:00",
+  "title": "知识笔记流程演示",
+  "body": "这是一条虚构教学示例，用于练习内容整理和审核流程。请换成自己的已核验内容，不要直接发布本示例。",
+  "tags": ["知识科普", "学习笔记"],
+  "expected_roles": ["cover"],
+  "media": [{"role": "cover", "path": "assets/01_cover.png"}],
+  "review": {
+    "topic_and_facts_verified": false,
+    "visual_content_verified": false,
+    "cover_identity_verified": false
+  }
+}

@@ -1,0 +1,26 @@
+# Credentials and local state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+cookies*.json
+storage-state*.json
+auth.json
+browser-profile/
+logs/
+
+# Local practice output
+__pycache__/
+*.py[cod]
+.venv/
+examples/my-note.json
+examples/assets/
+examples/practice-output*/
+
+# Private review material
+内部复验证据*/
+*勿外发*/
+*.log
+Thumbs.db
+.DS_Store

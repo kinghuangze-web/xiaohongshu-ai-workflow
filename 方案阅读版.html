@@ -1,0 +1,610 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>知识科普账号自动化实践与复现方案</title><style>
+:root{--paper:#faf8f2;--ink:#28352e;--muted:#68746a;--line:#dedfd4;--accent:#4e684f}
+*{box-sizing:border-box}html{scroll-padding-top:24px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,"Microsoft YaHei",sans-serif;line-height:1.85}
+.cover{padding:64px max(6vw,24px) 52px;border-bottom:1px solid var(--line);background:#e9edde}
+.eyebrow{font-size:13px;letter-spacing:.18em;color:var(--accent)}.cover h1{font-size:clamp(30px,4.6vw,58px);line-height:1.22;max-width:900px;margin:20px 0}
+.cover p{max-width:770px;color:#4c5b50}.boundary{display:inline-block;background:#fffdf4;border:1px solid #c8d0bc;padding:10px 18px;border-radius:4px;font-weight:650}
+.layout{display:grid;grid-template-columns:210px minmax(0,920px);gap:44px;max-width:1280px;margin:auto;padding:40px 28px 90px}
+nav{position:sticky;top:25px;align-self:start}nav a{display:block;padding:10px 9px;border-bottom:1px solid var(--line);color:var(--muted);text-decoration:none;font-size:14px}nav b{margin-right:14px;color:var(--accent);font-size:12px}
+main{min-width:0}article{padding-bottom:50px;margin-bottom:42px;border-bottom:1px solid var(--line)}article>h1{font-size:30px;line-height:1.5;margin-top:0}h2{font-size:23px;margin-top:38px}h3{font-size:18px;margin-top:28px}p,li{font-size:16px}a{color:#376044;text-underline-offset:4px}li{margin:7px 0}strong{font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px;display:block;overflow-x:auto}th{background:#e9edde;text-align:left}th,td{padding:12px;border:1px solid var(--line);vertical-align:top;min-width:95px}
+pre{overflow:auto;background:#eef0e8;border:1px solid var(--line);border-radius:5px;padding:18px;line-height:1.6;font-size:13px}code{font-family:Consolas,monospace}p code,li code{background:#edf0e7;padding:2px 5px;border-radius:3px;font-size:.88em}
+.workflow{margin:28px 0;padding:24px;background:white;border:1px solid #ced5d9}.workflow>h3{margin:0;font-size:26px}.workflow-subtitle{margin:6px 0 22px;color:#526575}.workflow-step{padding:16px 20px;background:#f6f8fa;border:1px solid #b6c1ca;border-radius:5px}.step-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.step-head b{font-size:19px}.step-head span{color:#425466;font-size:14px}.workflow-step p{font-size:15px;margin:8px 0 0}.workflow-arrow{text-align:center;font-size:30px;color:#526575;line-height:1.4}.workflow-step.human{background:#fff4dc;border-color:#cda952}.workflow aside{margin-top:22px;padding:14px 18px;background:#eef5fa;font-size:14px}.workflow img{max-width:100%}
+.foot{font-size:13px;color:var(--muted);margin-top:40px}@media(max-width:850px){.layout{display:block;padding:25px 20px}nav{position:static;display:flex;flex-wrap:wrap;gap:0 12px;margin-bottom:35px}nav a{font-size:12px;padding:7px}nav b{margin-right:5px}.cover{padding-top:38px}table{font-size:13px}.workflow{padding:16px}.step-head{display:block}.step-head span{display:block;margin-top:4px}.workflow-step{padding:13px}.workflow-step p{font-size:14px}.workflow>h3{font-size:22px}}
+@media print{body{background:white}.cover{padding:20px;background:white}.layout{display:block;padding:0}nav{display:none}article{break-before:page}h2,h3{break-after:avoid}pre{white-space:pre-wrap;overflow-wrap:anywhere}table{display:table;font-size:11px}p,li{font-size:12px}a{color:inherit}.workflow-step{break-inside:avoid}}
+</style></head>
+<body><header class="cover"><div class="eyebrow">KNOWLEDGE CONTENT WORKFLOW · 2026.10.23</div>
+<h1>我把小红书更新里的这些重复操作，<br>交给了 AI</h1>
+<p>文案和图片做完以后，怎样接着整理素材、填写发布页，再交给人审核？用一个知识科普账号的实际流程说明。</p>
+<div class="boundary">保留人工审核与最终发布</div></header>
+<div class="layout"><nav aria-label="章节导航"><a href="#overview"><b>01</b>阅读入口</a><a href="#plan"><b>02</b>完整方案</a><a href="#reproduce"><b>03</b>实践指南</a><a href="#images"><b>04</b>生图经验</a><a href="#open"><b>05</b>技术公开</a><a href="#example"><b>06</b>本地示例</a></nav><main><article id="overview"><h1>小红书知识科普账号的 AI 工作流</h1>
+<p>从选题、写稿、生图到素材整理和发布页填写，介绍一个知识科普账号怎样把重复操作交给 AI，以及普通人怎样从其中一段开始尝试。</p>
+<p><strong>人工审核与最终发布始终由创作者完成。</strong> 本仓库公开教程、流程图与独立教学示例，完整生产系统及其服务适配器不在本次发布范围内。</p>
+<h2>从这里开始</h2>
+<table>
+<thead>
+<tr>
+<th>想了解什么</th>
+<th>阅读入口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先读完整故事，了解工具怎样配合</td>
+<td><a href="#plan">完整方案</a></td>
+</tr>
+<tr>
+<td>按步骤搭建自己的流程</td>
+<td><a href="#reproduce">从零复现指南</a></td>
+</tr>
+<tr>
+<td>保持实物正确、系列统一的生图经验</td>
+<td><a href="#images">生图经验与通用规范</a></td>
+</tr>
+<tr>
+<td>公开范围、配置分离与授权说明</td>
+<td><a href="#open">技术公开说明</a></td>
+</tr>
+<tr>
+<td>运行本地素材校验与组包练习</td>
+<td><a href="#example">教学示例</a></td>
+</tr>
+</tbody>
+</table>
+<p><a href="#project-workflow">查看项目工作流程图</a></p>
+<h2>运行一个小示例</h2>
+<p>安装 Python 3.10 或更新版本后，下载本仓库并在根目录运行：</p>
+<pre><code class="language-powershell">python examples/prepare.py examples/sample.json
+</code></pre>
+<p>首次返回 <code>ok: false</code> 和退出码 2 是预期结果：虚构示例故意缺少图片和人工审核记录。按<a href="#example">示例说明</a>补充自己的素材，再练习整理一份待人工审核的内容包。</p>
+<p>示例只使用 Python 标准库，不需要密钥。它不连接模型、飞书或小红书，不能用来一键部署原生产系统。</p>
+<h2>下载与公开范围</h2>
+<p>喜欢连续阅读，可以下载整个仓库，打开<a href="方案阅读版.html">方案阅读版.html</a>。HTML 是离线阅读文件；GitHub 文件页展示源码，下载后用浏览器打开即可。</p>
+<p>账号名称、真实选题、私人路径、登录信息、生产配置和历史聊天没有收入本仓库。文章中的项目只以知识科普账号介绍。</p>
+<p>本仓库新写的教程、示例代码和通用流程图采用 <a href="LICENSE">MIT License</a>。外部链接及其内容保留各自授权，详见<a href="NOTICE.md">来源与授权范围</a>。</p>
+<p>整理日期：2026-10-23。平台界面和工具可能变化，按教程实际操作时需核对当时的要求。</p></article><article id="plan"><h1>我把小红书更新里的这些重复操作，交给了 AI</h1>
+<p>AI 已经替我把一批小红书内容填进了发布页，但我没有让它点发布。</p>
+<p>图片上传好了，标题、正文和话题也填好了，页面里的定时日期和时刻也已经核对过。接下来由我检查内容，再决定是否提交。</p>
+<p>我做的是一个知识科普账号。用 AI 写文案、生成图片之后，仍然要把图下载到本地，找到对应文案，再去创作者中心上传、填写和设置时间。不同工具里的结果要一份份接起来，才能变成一篇真正准备好发布的内容。</p>
+<p>这就是我搭这套工作流想解决的事。下面把一篇内容从选题到发布前的过程拆开，讲清楚哪些工作已经交给了 AI，哪些地方还得由我判断。如果你也在来回复制图片和文案，可以先从其中一段开始用。</p>
+<h2>先让每篇内容有一份完整的交接材料</h2>
+<p>要让 AI 接手重复操作，首先得告诉它：今天做哪一篇，哪些内容已经确认，最后要交出什么。</p>
+<p>我把候选选题放进飞书多维表格。表里记录要回答的问题、来源线索和计划时间，我审核后，再决定哪些进入制作。每次开始制作时，程序都会读取当前审核结果，避免拿着旧计划继续做。</p>
+<p>选题确定后，Antigravity 负责研究和写稿。它有命令行入口，可以由脚本调用，不需要我每次都打开一个新聊天，再重新解释项目背景。</p>
+<p>不过，只交出一段好看的正文还不够。接下来要做图，还需要知道封面写什么、内页放什么、例句怎么排。如果这些内容没有一起定下来，到了生图时又得重新问一遍。</p>
+<p>所以我把交付分成两份。</p>
+<p>一份是<strong>发布包</strong>，里面只有平台要用的标题、正文和末尾标签。另一份是<strong>制作说明</strong>，写清页面顺序、图中文字和参考要求。研究来源与待确认问题另存，留给我审核，不混进公开正文。</p>
+<p>写稿也有失败的时候。目前的维护记录里，仍有文案缺少必填内容的任务。它们会单独留下错误，其他已经成功的稿件保留，不把“运行过一次”记成“全部完成”。</p>
+<p>等这两份内容备齐，下一步就不用重新猜我要做什么。无论由我在网页里操作，还是交给本地助手，都从同一份材料接着做。</p>
+<p>这些文件由 Codex 按项目规则保存到对应日期下，Easel 将它们显示在内容库和日历里。哪一篇缺图、哪一篇已经人工处理，可以在同一个工作台里看见。已有成果会被标记保护，避免下次运行时重新覆盖。</p>
+<p>整个项目的分工如下。箭头表示内容怎样交接，其中仍有人工审核和按任务启动的环节。</p>
+<figure id="project-workflow" class="workflow" aria-label="项目工作流程图"><h3>项目工作流程图</h3><p class="workflow-subtitle">Codex 安排任务，Easel 展示内容与排期。箭头只表示交接顺序；各步由人工或脚本按需启动。</p><div class="workflow-step "><div class="step-head"><b>1. 选题审核</b><span>创作者 + 飞书</span></div><p>审核通过的选题与计划时间</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step "><div class="step-head"><b>2. 查证与写稿</b><span>Antigravity</span></div><p>标题、正文、标签及制作说明</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step "><div class="step-head"><b>3. 生成图片</b><span>ChatGPT + 生图规范</span></div><p>单图或套图；逐页核对内容</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step "><div class="step-head"><b>4. 整理素材与排期</b><span>Codex + Easel</span></div><p>文案、有序图片 / 视频与上传清单</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step "><div class="step-head"><b>5. 上传和填写</b><span>Chrome + 浏览器工具</span></div><p>已填好的编辑页，尚未提交</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step human"><div class="step-head"><b>6. 人工审核与发布</b><span>创作者</span></div><p>检查内容、声明和时间，再亲自点击发布</p></div><div class="workflow-arrow" aria-hidden="true">↓</div><div class="workflow-step "><div class="step-head"><b>7. 登记结果并复盘</b><span>创作者 + 项目记录</span></div><p>平台状态、内容数据和后续选题</p></div><aside><b>视频支线（按需）</b><br>图卡与文案 → Remotion / FFmpeg → MP4 → 第 4 步</aside></figure>
+<p><a href="assets/项目工作流程图.png">单独查看流程图</a></p>
+<p>有了这份交接材料，下一步才是把文字变成图片。这里恰好也是我需要保留较多判断的地方。</p>
+<h2>做图时，先解决“画的到底是不是这个东西”</h2>
+<p>我会把制作说明和生图规范一起交给 ChatGPT。规范里写清画幅、版式、文字层级，以及参考图各自负责什么。这些任务说明可以保存成生图 Skill（技能），交给支持它的工具反复读取；在普通网页聊天里，也可以直接附上规范文件使用。</p>
+<p>但一份规范要有用，得记录实际出过什么错。比如我的生图资料里，就有一个零件画错连接关系的例子：它原本用于把两件东西固定在一起，模型却画成只装在一件物品上的金属片。</p>
+<p>图可能很好看，知识内容已经错了。继续要求“更精致一点”，解决不了这个问题。</p>
+<p>后来写制作要求时，我会先说明目标物附着在哪个完整物件上，位于哪里，连接什么，数量和比例是什么样。参考照片即使不好看，也可以只提供结构证据；光线和背景再另外设计。</p>
+<p>物体画对以后，套图还有下一道问题：后面的页面会不会悄悄换了一款产品？</p>
+<p>我把通过检查的首图作为后续页面的参考，要求保留相同颜色、材质和关键结构。内容页可以调整裁切和文字区，但目标部件的位置不能随意改变。这样，每一页虽然单独生成，读者看到的仍然是同一件物品。</p>
+<p>页数也在制作前确定。采用“封面＋每种语言一页＋尾图”的结构，四种语言就是六张独立图片。先把角色和顺序列清楚，生成后就知道缺哪一页，也不会把一张多格拼图当成完整素材。</p>
+<p>最后再检查图上的字。术语、读音和例句要看原图核对；需要日期与编号的封面，由项目给出确定值，不让模型自己猜下一期是多少。文字太密就减少信息或调整分页，不能一直缩字号。</p>
+<p>这些经验已经整理成了<a href="#images">通用生图规范与指令</a>。它可以跟着内容包一起交给制图工具，省去每次从头解释的工作。</p>
+<p>不过，图片做出来还没有结束。下载到本地以后，得把它们准确放回对应的文案里。</p>
+<h2>图片和文案配对以后，才能交给上传环节</h2>
+<p>我的做法是按日期收好内容，每篇有自己的文件夹。发布包、制作说明和有序图片放在一起，上传时不用再去不同聊天里翻找。</p>
+<p>Codex 按清单整理这些文件，Easel 提供查看与复制入口。清单会写明本篇编号、计划时间、文案位置和图片顺序。</p>
+<p>这里不能只靠下载顺序配图。同一天可能下载了几套素材，文件名也可能相似。图片上的物件、页面内容和编号都要对得上，才把它接到对应发布包里。</p>
+<p>同样，看到某个目录已经有图片时，程序要先保护它。这可能是我已经手工处理过的内容，不能因为后台没有登记发布，就擅自再做一套。</p>
+<p>这份清单还承担着另一个作用：等助手把内容填进网页后，要拿它重新比对。否则，“填完了”只是一句话，我不知道实际填进去的是不是这一版。</p>
+<h2>进入创作者中心后，助手填表，我来决定是否发布</h2>
+<p>准备某一天的内容时，我把任务交给助手。它先核对当天清单，再通过已经登录的 Chrome 操作创作者中心。</p>
+<p>本项目跑通的是这条浏览器控制路线。它上传本篇图片或视频，填写标题和正文，再处理话题、内容声明和定时时间。</p>
+<p>这些操作里，有些细节看起来只是点几下，实际却容易被误判。</p>
+<p>例如话题，正文里出现了 <code>#某个词</code>，不一定已经关联到平台话题。助手需要等候选出现，再选择对应项。遇到同名候选，还要先区分，不能随便点一个就宣布完成。</p>
+<p>定时也一样。填入日期以后，要重新读取完整的日期和时刻，确认没有选错。标题、正文和素材数量也会与上传清单比较，每篇保留一个独立编辑页，方便我逐篇审核。</p>
+<p>所以，我拿到的结果很具体：一组已经填好的发布页面，以及对应的检查记录。发现图文不匹配的那篇会停下来，其他独立且正确的内容可以继续准备。</p>
+<p><strong>最终发布始终由我完成。</strong> 我检查内容、声明和时间，亲自点击提交，再确认平台接受了定时或已经发布。只在表单里填好时间，项目里不能就记成“已定时”。</p>
+<p>这也是文章开头没有让 AI 点发布的原因。我保留真人审核和最终提交，不做账号无人托管，也不自动评论或私信。内容真实性与 AI 声明等平台要求，仍然需要遵守。</p>
+<h2>同一份内容，还可以继续做视频</h2>
+<p>图文这条流程跑通后，视频就有了可以复用的材料：已经确定的文案和经过检查的图卡。</p>
+<p>我用现有 Remotion 模板替换内容，安排页面停留与转场，再导出 MP4。FFmpeg 用于检查文件是否能够完整解码。模板省去每期重新搭动画的工作，但文字是否读得完、声音是否合适，还要实际看和听。</p>
+<p>这一步有个很具体的小问题：一段已经做好的视频只有背景音乐，没有旁白，发布文案里却写着“听一遍”。最后把它改成了“看一遍”。</p>
+<p>这句话改得很小，却说明了为什么我还需要审核。视频生成了、文案也生成了，两者仍可能对不上。</p>
+<p>视频和来源图文的发布结果也分别记录。图文已经发布，不代表改编的视频也发过了。</p>
+<p>如果只做图文，可以先跳过视频。账号复盘和作品网站同步也放在主流程之后：复盘用真实发布时间和同一观察窗口的数据比较；网站需要另外确认可公开的素材出口，不能把本地文件存在当成已经同步成功。具体方法放在<a href="#reproduce">实践指南</a>里，开始时不必一起接入。</p>
+<h2>想尝试，先把自己的一篇内容交接完整</h2>
+<p>看完这套流程，先选一条自己正在做的内容就够了。第一步可以直接把下面这段交给已有的 AI 助手：</p>
+<pre><code class="language-text">我在做一篇知识科普内容。
+请只依据我提供的资料，整理两份文件：
+
+发布包：标题、正文、末尾标签。
+制作说明：按页列出图中文字、画面要求和参考图用途。
+
+有争议的事实单独列出来，不自行补全。
+先给我检查，不登录平台，也不提交发布。
+
+我的资料：……
+</code></pre>
+<p>检查通过后，把制作说明交给生图工具，再把成品图与发布包放进同一个文件夹。即使暂时还没有接浏览器自动化，这一步已经可以解决“文字在一个聊天、图片在另一个聊天，上传时重新找一遍”的麻烦。</p>
+<p>接下来再决定，要不要把文件整理交给本地助手，把选题管理放进审核表，以及是否需要辅助填写网页。每接上一段，就用自己这一篇内容检查一次结果。</p>
+<p>本资料附了<a href="#example">本地组包示例</a>，可以练习按清单检查和整理文件。它没有连接飞书、Antigravity 或浏览器，完整生产系统的通用代码与配置还需要另行整理。我也没有完整的工时与费用对照，因此不承诺节省多少时间或成本。</p>
+<p>想从内容制作开始，拿走上面的交接指令和生图规范就能尝试；想继续搭本地自动化，再按实践指南查看下一段需要接什么。</p></article><article id="reproduce"><h1>从一条笔记开始尝试</h1>
+<p>目标是做出一条“有来源、有文案、有素材、有审核记录”的知识笔记，再逐步减少重复劳动。不要一开始同时接视频、网站和所有周期任务。</p>
+<p>本指南先帮助你完成一篇内容，再说明怎样接入工具。附带的 Python 示例只验证本地组包。</p>
+<h2>这份指南能带你做到哪里</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>现在可以怎样做</th>
+<th>还需要什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按同样的方法制作一篇图文</td>
+<td>用选题表、AI、制作规范和文件夹，照下面步骤完成</td>
+<td>自己核对资料与图片</td>
+</tr>
+<tr>
+<td>练习自动检查并整理本地内容包</td>
+<td>运行随附 Python 示例</td>
+<td>安装 Python，准备自己的素材</td>
+</tr>
+<tr>
+<td>部署与原项目相同的自动化系统</td>
+<td>本资料还不能一键完成</td>
+<td>原项目通用模块、依赖清单、配置模板和各服务适配器</td>
+</tr>
+</tbody>
+</table>
+<p>先完成第一项即可判断这套方法是否适合自己。完整技术部署所需模块见文末，不把手工练习或本地组包说成已经接通整个系统。</p>
+<h2>第一步：建立一个工作目录</h2>
+<p>新建 <code>content-workspace</code> 文件夹，里面放 <code>rules</code>、<code>data</code>、<code>outputs</code>。位置由自己选择，不要照抄别人的个人目录。</p>
+<p>先写一份规则，复制下面这段即可开始：</p>
+<pre><code class="language-text">这是一个由真人负责的知识科普账号。
+AI 协助研究、写稿、制作素材和整理文件。
+任何事实不确定时先列出问题，不补造来源。
+生成完成不代表审核通过；素材存在不代表发布完成。
+保护人工修改、已有素材、已定时和已发布内容。
+只能在指定工作目录内整理产物。
+平台最终审核与发布始终由人完成。
+不自动评论、私信、点赞、关注，不模拟真人互动。
+</code></pre>
+<p>检查：在下一次真实任务中提供这份规则，观察产物是否按指定目录和格式保存，以及助手是否停在人工提交之前。复述规则不能证明实际执行会遵守它。</p>
+<h2>第二步：做一张选题审核表</h2>
+<p>开始可以用本地表格；后续需要多人协作再用飞书等审核工具。不要先搭几十列。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>示例或用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>topic_key</code></td>
+<td>不随标题修改而改变的稳定键</td>
+</tr>
+<tr>
+<td>问题</td>
+<td>读者具体想知道什么</td>
+</tr>
+<tr>
+<td>候选答案</td>
+<td>尚未审核的解释</td>
+</tr>
+<tr>
+<td>来源</td>
+<td>能支持具体表述的链接或资料</td>
+</tr>
+<tr>
+<td>未解决问题</td>
+<td>术语、数字、标准或例外</td>
+</tr>
+<tr>
+<td>人工结论</td>
+<td>待审 / 通过 / 退回</td>
+</tr>
+<tr>
+<td>计划时间</td>
+<td>含日期、时分、时区</td>
+</tr>
+<tr>
+<td>处理状态</td>
+<td>未制作 / 已有素材 / 人工处理中</td>
+</tr>
+<tr>
+<td>发布确认</td>
+<td>未确认 / 平台已定时 / 已发布，附确认时间</td>
+</tr>
+</tbody>
+</table>
+<p>验收：待审内容不会进入正式生产；计划只有日期没有时分时，不擅自猜时间。</p>
+<p>如果接入远程审核表，先验证读取一行、正确解析审核结论和时间，再做写入或自动生产。访问权限由本人在工具里配置，配置和令牌保留在本地。</p>
+<h2>第三步：让研究与写稿有不同输出</h2>
+<p>把一个已经确定的问题交给研究助手：</p>
+<pre><code class="language-text">请研究这个知识问题：[问题]。
+输出：候选解释、可靠一手来源、每条来源支持哪句结论、仍不确定的部分。
+区分正式术语、常用描述、商品名和地区差异。
+没有证据的历史、专利、统一标准和数字不要补写。
+先给我审核，不创建发布任务，不登录平台。
+</code></pre>
+<p>人工核对后再交给写稿助手：</p>
+<pre><code class="language-text">根据下面已经审核的资料生成一条知识科普笔记。
+输出两个文档：
+1. 发布包：标题、正文、末尾标签，不放内部备注。
+2. 制作说明：页面角色、图中文字、参考资料和需要人工检查的地方。
+忠实保留事实边界；不为了吸引点击加入未经核实的断言。
+资料：[已审核资料]
+</code></pre>
+<p>验收：发布包能直接复制；制作说明能交给另一位制作者执行；公开正文里没有系统路径、来源核验备注或调试信息。</p>
+<p>接生成器时，要求结构化输出，例如 <code>title</code>、<code>body</code>、<code>tags</code>。先检查字段类型与非空，再检查内容。输出缺字段时拒收该条；其他成功条目不应被抹掉。</p>
+<h2>第四步：固定一个最小视觉规范</h2>
+<p>选择一组清楚、可复用的规则：画幅、文字层级、边距、背景、强调色、参考图如何使用。生活物件类内容还要先锁定物件结构。</p>
+<p>可以把 <a href="#images">通用生图规范</a> 作为制作说明，在每次任务中显式提供。宿主支持 Skill 时再组织成 <code>SKILL.md</code> 和引用文件，不要假设普通网页聊天会自动读取本机文件。</p>
+<p>如果在网页版 ChatGPT 做图：手动附上参考图、制作说明和规范，生成后下载到本条目录。如果在支持图像工具的本地宿主做图：由该宿主调用工具，核对实际生成文件后再归档。两条路线是不同入口，不把其中一个成功说成另一个也已接通。</p>
+<p>验收：先做首图，在真实显示尺寸下检查，再继续其他页面。图中文字、结构或关键日期编号错误时，针对对应页修正。不要让模型靠猜测补上缺失信息。</p>
+<h2>第五步：用文件与清单把内容连起来</h2>
+<p>为每条内容保存：公开标题、正文、标签、计划时间、有序素材、页面角色、人工检查结论。把研究来源留在系统资料中。</p>
+<p>建议从一条开始试验 <a href="#example">本地示例</a>。它可以检查缺文件、编号格式、完整时间、审核记录和素材顺序，并生成一个待人工审核的内容包。</p>
+<p>示例不代表原系统源码已经公开；它演示的是读者可以先复现的共同部分。</p>
+<p>验收：删除或错写一个素材路径时，程序明确失败；重跑时不覆盖已有内容；缺人工确认时不伪装成通过；产物始终写明未提交平台。</p>
+<h2>第六步：手工上传一遍，再考虑辅助代填</h2>
+<p>先在创作者中心手工完成：</p>
+<ol>
+<li>核对账号和本篇素材顺序。</li>
+<li>上传并确认处理完成。</li>
+<li>填写标题、正文，关联需要的话题。</li>
+<li>按实际情况处理内容与 AI 声明。</li>
+<li>如需定时，填写完整日期时间。</li>
+<li>人工逐项检查后，由自己提交。</li>
+<li>回读平台结果，记录实际定时或发布状态。</li>
+</ol>
+<p>先把这条路径跑通，才知道后续辅助工具应该核对什么。</p>
+<p>如果当前宿主和平台允许相应辅助操作，并且已经提供浏览器控制工具，可以让助手只准备编辑页：</p>
+<pre><code class="language-text">依据这份已核验清单准备编辑页：[清单]。
+开始前确认实际账号。每条内容使用独立页面。
+填完后回读标题、正文、素材顺序、正式话题、声明和完整日期时间。
+发现内容差异时报告，不替换成另一条内容。
+保留页面供我审核；不要点击发布、定时发布或其他最终提交按钮。
+不要修改本地记录为已定时或已发布。
+</code></pre>
+<p>不同浏览器控制器、MCP 和宿主之间没有天然通用性。这里不给出写死页面节点的“一键发布脚本”，也不分发任何登录态。缺少合适工具时，人工操作这一步就足够。</p>
+<p>验收：编辑页与清单一致，且有明确未提交记录。即使定时字段填写成功，仍不能登记成平台已定时。</p>
+<h2>第七步：把真实发布结果写回</h2>
+<p>最终提交由人完成。平台显示接收、定时成功或已发布后，再记录状态与证据。仅仅在聊天里说“做完了”，不够。</p>
+<p>不建议只用一个 <code>status</code> 字段承载所有含义。一个更清楚的教学设计是：</p>
+<pre><code class="language-json">{
+  &quot;production_status&quot;: &quot;PACKAGE_READY&quot;,
+  &quot;review_status&quot;: &quot;PENDING_HUMAN_REVIEW&quot;,
+  &quot;platform_status&quot;: &quot;NOT_SUBMITTED&quot;,
+  &quot;scheduled_for&quot;: &quot;2030-01-01T09:00:00+08:00&quot;,
+  &quot;published_at&quot;: null
+}
+</code></pre>
+<p>这是便于理解的改进设计，不是声称当前所有历史文件都已经使用这组字段。</p>
+<h2>第八步：再接周期任务</h2>
+<p>周期维护只处理审核通过、未受保护、时间明确的内容。每次限定处理窗口和任务量，写入前防止并发。先演练一次，再设定周期。</p>
+<p>伪代码如下，它不是可直接运行的生产入口：</p>
+<pre><code class="language-python">with acquire_project_lock():
+    review = read_current_review_or_stop()
+    for item in bounded_candidates(review):
+        if item.is_protected:
+            continue
+        try:
+            validate_identity_and_time(item)
+            prepare_local_package(item)
+            record_result(item, &quot;prepared&quot;)
+        except Exception as error:
+            record_failure(item, error)
+    notify_only_meaningful_changes()
+# 没有自动发布步骤
+</code></pre>
+<p>失败演练至少包括：审核表不可读、缺时分、素材错配、生成器缺字段、已有人工修改和同一任务重复执行。不能为了“保持更新”绕过这些条件。</p>
+<p>验收：失败可定位，成功产物保留；没有新变化时不刷屏；恢复后不会重复生产或覆盖。</p>
+<h2>第九步：可选的视频与网站</h2>
+<p>视频先选一个可编辑模板，输入已核对的图片与文案，检查字体、密集正文和转场，再导出。用自己的 MP4 执行技术检查的示例：</p>
+<pre><code class="language-powershell">ffprobe -v error -show_format -show_streams -of json .\final.mp4
+ffmpeg -v error -i .\final.mp4 -f null -
+</code></pre>
+<p>这些命令需要先从可信发行渠道安装 FFmpeg，并确认命令可用。解码无错误后仍要人工试听和手机预览。</p>
+<p>网站同步作为独立项目接入，先明确允许公开的素材出口。先验证本地索引全部资源，备份旧版，在暂存位置上传完整文件，再校验与切换；失败停止，保留旧版和诊断。不要把本地素材到站点的同步与平台发布状态混为一谈。</p>
+<h2>第十步：记下真实成本和收益</h2>
+<p>按一条内容记录：研究时间、审稿时间、生成次数、返工次数、人工制作时间、平台准备时间、审核时间和实际账单。</p>
+<p>模型 API 用量、软件订阅、图像额度、视频渲染、人工工时是不同计量。当前没有同口径对照，不填写节省比例。不需要先购买一整套工具；从已有工具的一条闭环开始。</p>
+<h2>完整技术部署还需要哪些模块</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>要连接的输入与输出</th>
+<th>应怎样验证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>审核表读取</td>
+<td>飞书当前审核结论 → 可制作选题</td>
+<td>待审题不进入生产，时间解析正确</td>
+</tr>
+<tr>
+<td>文案生成器</td>
+<td>已审核资料 → 标题、正文和标签</td>
+<td>缺字段时拒收，其他成功条目保留</td>
+</tr>
+<tr>
+<td>生图交接与回收</td>
+<td>制作说明 → 逐页素材 → 内容目录</td>
+<td>图片身份、页数和顺序对应</td>
+</tr>
+<tr>
+<td>内容管理与排期</td>
+<td>稳定编号、日期、素材 → 工作台与清单</td>
+<td>重跑不重复生成，不覆盖人工成果</td>
+</tr>
+<tr>
+<td>浏览器辅助填写</td>
+<td>上传清单 → 待审核编辑页</td>
+<td>字段读回一致，最终未提交</td>
+</tr>
+<tr>
+<td>周期任务</td>
+<td>上述模块 → 状态记录与异常通知</td>
+<td>有界执行，故障后能够接续</td>
+</tr>
+</tbody>
+</table>
+<p>以上是完整系统需要实现的连接关系，本资料没有附带这些生产适配器。工具账号、相应访问权限和项目配置也需要使用者自己准备。后续公开模块时，应补充安装命令和从空环境运行的验证记录。</p>
+<h2>做完一篇内容的判断</h2>
+<p>完成一条闭环，至少应有：来源与审核、公开发布包、有序素材、明确身份和时间、可追溯核验、人工提交及平台结果。只完成其中一段，就记录完成这一段。</p>
+<p>如果卡住，先定位是内容、素材、生成器还是平台页面，不要一次更换整套系统。让 AI 输出：具体失败、已经完成什么、需要补什么，以及补完后从哪一步继续。</p></article><article id="images"><h1>生图经验：先保证内容正确，再统一视觉</h1>
+<p>这份规范整理了单语图片与多语言套图的制作经验，使用通用示例说明。</p>
+<p>它适合生活物件类知识图卡，可以按其他知识领域改写；不是平台唯一推荐的版式，也不能保证流量。</p>
+<h2>1. 先理解物体，不从名字猜形状</h2>
+<p>“夹子”“支架”“卡扣”是很宽泛的词。模型可能生成一件看起来合理、实际完全不同的东西。</p>
+<p>生成前写清七件事：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>要回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>宿主</td>
+<td>它属于或连接在哪个完整物件上？</td>
+</tr>
+<tr>
+<td>位置</td>
+<td>在哪一面、哪个部位？</td>
+</tr>
+<tr>
+<td>连接关系</td>
+<td>穿过、固定、支撑、覆盖还是连接两个东西？</td>
+</tr>
+<tr>
+<td>数量</td>
+<td>单个、成对、多个，分别连接什么？</td>
+</tr>
+<tr>
+<td>几何</td>
+<td>哪些孔、槽、边缘和折弯不可改变？</td>
+</tr>
+<tr>
+<td>材料与比例</td>
+<td>什么材料，相对宿主有多大？</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>使用、包装、运输还是拆封状态？</td>
+</tr>
+</tbody>
+</table>
+<p>不确定时先看参考图；必要时查制造商等可靠实物资料，再进入制作。不要为了交图而重新发明一个零件。</p>
+<h2>2. 结构参考和风格参考分开</h2>
+<p>一张低清、难看的实物照片，仍可能是最重要的结构证据。</p>
+<p>结构参考只继承数量、连接方式、位置、比例和状态；风格参考继承构图、光线、背景和文字层级。明确告诉模型两张图各自负责什么，避免把结构照片的糟糕背景带入成品，或把漂亮母版中的错误结构照搬过来。</p>
+<p>核心经验是：美化摄影与排版，不改变物体如何真实存在。</p>
+<h2>3. 视觉规则保持少而明确</h2>
+<p>先固定画幅、背景、文字层级、边距和强调色。生活编辑图卡可以选择竖版、克制自然光、浅色信息区和深色正文，但这些是可选设计方向，不需要复刻原账号。</p>
+<p>把目标部位标清楚即可。箭头、外发光、高亮和装饰同时出现，常常会抢走主信息。系列风格也不等于必须塞进某国文化符号。</p>
+<p>封面有一个主要问题；答案页有一个主要答案。若任务要求用封面提出悬念，就不要同时塞入术语、读音、用途和历史。若内容目标是直接解释概念，则可以选择结论式封面，无需机械隐藏答案。</p>
+<h2>4. 套图保持同一个实物</h2>
+<p>封面通过后，记录并锁定：型号、颜色、材质、轮廓、关键结构、目标部位位置、背景和光照。</p>
+<p>后续页把首图作为实际参考输入。可以改变裁切、轻微机位和文字区，但不换型号，不增加按钮，不改变孔洞，不移动目标部位。</p>
+<p>“每页独立生成”只是工具调用方式，不代表每页可以重新设计产品。</p>
+<p>一种稳定的操作顺序是：首图 → 第一张内容页 → 以首图锁物体、以第一张内容页锁版式 → 其余内容页 → 尾图。工具不支持多张参考时，优先保证物体身份，并把版式规则写清楚。</p>
+<h2>5. 页数由内容清单决定</h2>
+<p>采用“首图 + 每语言一页 + 尾图”时，总页数为 N+2。四种语言就是六张，少一页都要明确标缺。</p>
+<p>不要把整套做成一张拼图；不要把同一张图简单裁成多份冒充不同内容页。另一方面，也不要在没有要求时自动追加备选页。</p>
+<p>单图与套图是不同产品形式，不能被旧模板的固定图数绑住。制作前就写明角色清单，例如：</p>
+<pre><code class="language-text">cover, language_a, language_b, language_c, language_d, tail
+</code></pre>
+<p>这个列表比“做一套完整的图”更容易检查。</p>
+<h2>6. 事实核查先于视觉执行</h2>
+<p>先审定名称、读音、例句和解释，再交给生图环节。视觉制作者可以等义压缩文字，但不能把不确定说法变成绝对结论，也不能新增品牌、专利、标准、年代和数字。</p>
+<p>发现稿件可能错误时，返回研究环节修订并记录。不能在不同语言页里各自悄悄“修正”，最后出现一套彼此矛盾的内容。</p>
+<p>多语言不只是翻译大标题。每个语言页应有一致的信息层级与相近的解释深度。某个表达只是描述性说法，就注明这一点，不包装成唯一正式名称。</p>
+<h2>7. 文字密度和身份信息要单独检查</h2>
+<p>文字过多时优先减少信息，而不是一直缩字号。用实际手机显示尺寸检查名称、例句和解释，不能只看大图。</p>
+<p>有日期或系列编号要求时，由项目清单提供确定值。缺失时暂停对应内容，不让模型猜连续编号。首图中的日期与编号要实际看过；人工勾选“已核验”之前不能只看文件名。</p>
+<p>图片尺寸和比例通过检查后，还要打开原图校对文字，特别是外语读音和密集的小字。缩略图适合检查整体版式，逐字校对需要看清原文。</p>
+<h2>8. 交付前检查表</h2>
+<ul>
+<li>物体、数量、连接关系、比例和状态与证据一致。</li>
+<li>全套是同一个物体，目标部位没有漂移。</li>
+<li>页数、顺序、语言章节与清单一致。</li>
+<li>标题、术语、读音、例句、日期和编号已逐项核对。</li>
+<li>没有新增未经审核的事实或无关品牌。</li>
+<li>手机尺寸可读，没有裁断、遮挡或过密小字。</li>
+<li>只把成品放入用户交付区，核验和制作记录保存在内部资料中。</li>
+</ul>
+<h2>可复制的通用制作指令</h2>
+<p>以下是重新编写的教学模板，不是原账号私有提示词。</p>
+<h3>首图</h3>
+<pre><code class="language-text">制作一张知识科普图卡，画幅为[比例]。
+已审核内容：[问题与图中文字]。
+系列编号：[由项目提供]；日期：[明确日期，如需要]。
+
+结构证据：[参考图A]，只继承实物结构和关系。
+风格参考：[参考图B或文字规范]，只继承视觉语言。
+实物身份：宿主[ ]，位置[ ]，连接关系[ ]，数量[ ]，
+几何[ ]，材料与相对比例[ ]，出现状态[ ]。
+
+不可改动：[关键结构]。
+可以改动：[光线、背景、裁切范围]。
+文字逐字使用：[文本]。
+不得新增：[未经核实的内容与多余元素]。
+只生成一张独立图片。
+</code></pre>
+<h3>后续内容页</h3>
+<pre><code class="language-text">首图是同一实物的身份参考，已通过的内容页是版式参考。
+保留相同型号、颜色、材料、关键结构、目标位置和光照。
+本页角色：[语言或知识模块]。
+本页准确文字：[已审核文本]。
+允许改变：[裁切与轻微机位]。
+禁止新增事实、换产品、加结构或改变部件数量。
+文字过密时先提出等义压缩建议，不用不可读的小字强塞。
+只生成本页一张独立图片。
+</code></pre>
+<h3>返工</h3>
+<pre><code class="language-text">保留已经通过的[属性]。
+仅修正[具体错误]，依据是[参考图或审核记录]。
+其他页面不重做，不修改已经审核的文字与结构。
+完成后重新检查[受影响的项目]。
+</code></pre>
+<p>反复出现的错误值得加入规范；一次偶发问题不必扩成几十条规则。规范应帮助下一次制作，不能把所有历史聊天永久堆进提示词。</p></article><article id="open"><h1>技术怎样公开：学习成熟项目的组织方式</h1>
+<p>这套资料先公开工作方法和使用虚构资料的本地示例。生产代码需要分离私有配置，再按模块整理。</p>
+<h2>主流开源项目有哪些值得学习的做法</h2>
+<p>这里参考了两个实际项目的公开结构：</p>
+<ul>
+<li><a href="https://github.com/microsoft/generative-ai-for-beginners">Microsoft Generative AI for Beginners</a>：按课程组织学习内容，提供入门资料、示例和贡献说明。</li>
+<li><a href="https://github.com/openai/openai-cookbook">OpenAI Cookbook</a>：围绕具体任务提供示例和指南，说明运行所需配置，并公开许可证。</li>
+</ul>
+<p>参考这两类项目，可以把教程、示例代码、环境配置和授权说明分开组织，让读者先完成一个小任务，再阅读实现细节。</p>
+<h2>第一版公开什么</h2>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工作流、角色分工、完成条件</td>
+<td>完整解释</td>
+</tr>
+<tr>
+<td>生图经验和核验方法</td>
+<td>提炼成通用规范，不附账号母版和原图</td>
+</tr>
+<tr>
+<td>配置</td>
+<td>生产配置模板后续随模块整理；当前只提供教学输入示例</td>
+</tr>
+<tr>
+<td>本地校验与组包代码</td>
+<td>提供独立教学实现，标明能做什么</td>
+</tr>
+<tr>
+<td>生产执行器</td>
+<td>先分离配置、身份和依赖，再决定是否逐模块公开</td>
+</tr>
+<tr>
+<td>平台操作</td>
+<td>说明人工边界，不分发自动提交功能和登录文件</td>
+</tr>
+<tr>
+<td>历史聊天、真实审核表、账号数据</td>
+<td>作为内部证据，不打进公开压缩包</td>
+</tr>
+</tbody>
+</table>
+<p>当前资料包含流程、生图经验和本地教学代码。生产配置与服务适配器尚未提供，完整源码仍需整理。</p>
+<h2>以后怎样扩展仓库</h2>
+<p>当前仓库先提供教程、通用流程图和独立示例。以后整理生产模块时，可以逐步采用下面的结构；下列 src、配置模板等是扩展建议，不代表已经随本仓库交付：</p>
+<pre><code class="language-text">knowledge-content-workflow/
+  README.md                 项目介绍、边界、快速开始
+  docs/                     完整方案与图文教程
+  examples/                 虚构输入与可运行示例
+  config.example.json       空白配置
+  src/                      可独立运行的通用模块
+  tests/                    核心行为验证
+  .gitignore                排除私有文件
+  LICENSE                   明确授权范围
+  THIRD_PARTY_NOTICES.md    第三方来源和许可证
+  CONTRIBUTING.md           如何提交问题与改进
+  SECURITY.md               如何报告安全问题
+  CHANGELOG.md              版本与兼容性变化
+</code></pre>
+<p>最初不用把每个文件都写得很长。先让一个陌生人按 README 成功运行示例，知道哪些步骤手工完成、哪些接口需要自己实现。</p>
+<h2>配置与身份分离</h2>
+<p>代码中使用可配置的工作目录、审核表连接、模型入口和输出路径，不写死作者的目录、账号或工作区标识。</p>
+<p>需要密钥的模块提供 <code>.env.example</code>，仅列变量名和空值；真实 <code>.env</code>、Cookie、浏览器用户目录、会话文件和原始日志排除。不能把“加入 .gitignore”当成清理历史提交；如果误提交过凭据，需要处理凭据与历史记录后再公开。</p>
+<p>本次示例完全不需要凭据，因此没有附带无用的 <code>.env</code>。以后接模型或远程审核表时再增加必要配置。</p>
+<p>公开版与内部核验资料应放在不同目录，压缩包明确只取公开目录。不要发布未打码截图，也不要把打码后的截图当作已经检查了图片元数据或原文件。</p>
+<h2>许可证怎么处理</h2>
+<p>公开可见和明确允许他人使用、修改、分发是两件事。GitHub 的官方说明建议开源仓库附上明确许可证；没有许可证不能等同于开放授权。<a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository">GitHub：Licensing a repository</a></p>
+<p>本仓库新写的教程、通用流程图及独立教学代码统一采用 <a href="LICENSE">MIT License</a>，署名使用公开 GitHub 用户名。读者可以依照许可证使用、修改和分发，需保留版权及许可声明。</p>
+<p>许可范围限于本仓库新写的内容，不包含原生产系统、账号原图、母版、字体、音乐、第三方项目或模型服务。外部链接也不改变被链接内容的授权，具体范围见 <a href="NOTICE.md">NOTICE.md</a>。</p>
+<p>后续公开生产模块时，仍需核对其实际来源、依赖和许可证；本次发布不代表原生产项目已完成完整授权审计。</p>
+<h2>平台边界怎样表述</h2>
+<p>本方案固定保留真人审核、最终提交和结果确认；不提供账号无人托管、批量自动发布或模拟真人互动功能。</p>
+<p>平台规范不能被简化成“最后一步由人点击就一定合规”。小红书有关 AI 托管账号的公开报道涉及自动发布、模拟互动及内容真实性等问题，可参考<a href="https://www.thepaper.cn/newsDetail_forward_32741496">澎湃新闻对平台公告的报道</a>。这里是媒体对公告的转述，不冒充直接取得了当下全部平台条款。</p>
+<p>AI 内容应如实标识。小红书官方<a href="https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&amp;userType=4">社区公约相关帮助页</a>的搜索收录文本也提到清晰说明 AI 创作；本次直接打开正文未完整返回，因此不据此声称某个表单按钮或操作范围永久不变。实际操作以当次平台要求为准。</p>
+<h2>对外发布前的具体检查</h2>
+<ol>
+<li>用虚构目录和数据，从头运行快速开始。</li>
+<li>确认读者知道示例没有接通模型、审核表和平台。</li>
+<li>检查源码、示例、压缩包、截图和文档中的账号、路径与配置。</li>
+<li>核对第三方依赖与许可证，说明不包含的素材。</li>
+<li>对照核验记录，删去证据不支持的效果和自动化程度承诺。</li>
+<li>确认最终提交始终由人完成，且没有附带隐蔽的提交入口。</li>
+</ol>
+<p>本仓库首版交付教程、流程图和独立本地示例。完整生产执行器、账号数据和内部核验记录不在公开范围内。</p></article><article id="example"><h1>本地教学示例：核验并整理一条内容</h1>
+<p>只使用 Python 标准库，不联网、不登录、不调用模型，不包含发布功能。它是重新编写的教学实现，不是原项目执行器。</p>
+<h2>它能做什么</h2>
+<ul>
+<li>检查标题、正文、标签、完整时间与唯一页面角色。</li>
+<li>检查显式人工审核记录与本地 PNG/JPEG/WebP 素材文件头。</li>
+<li>计算文件 SHA-256，按清单顺序复制素材。</li>
+<li>输出发布包和待人工审核清单，始终记录 <code>submitted: false</code>。</li>
+<li>拒绝覆盖既有输出目录。</li>
+</ul>
+<p>文件头检查不等于完整解码或视觉验收。脚本不会判断图中物体、事实、日期或编号是否正确；审核布尔值由人实际检查后填写。</p>
+<h2>运行环境</h2>
+<p>需要已安装的 Python 3.10 或更新版本。Windows 可先运行 <code>py --version</code>；没有 <code>py</code> 时用自己环境中的 <code>python</code>。安装来源、权限与路径按自己的设备选择。</p>
+<p>在本 <code>examples</code> 文件夹打开终端：</p>
+<pre><code class="language-powershell">py -3 .\prepare.py .\sample.json
+</code></pre>
+<p>初次返回 <code>ok: false</code> 和退出码 2 是预期结果：示例故意没有图片，也没有人工审核通过，避免把假数据当成可发布内容。</p>
+<h2>用自己的内容完成练习</h2>
+<ol>
+<li>复制 <code>sample.json</code> 为 <code>my-note.json</code>。</li>
+<li>在 <code>assets</code> 文件夹放入自己的 PNG/JPEG/WebP 图，更新清单相对路径。不要使用别人的真实账号素材。</li>
+<li>改成自己的编号、标题、正文、标签和完整时间。</li>
+<li><code>expected_roles</code> 与素材角色一一对应。单图示例为 <code>cover</code>；多语言可改为 <code>cover, cn, jp, en, other, tail</code>。</li>
+<li>逐项核实事实、素材身份与图片内容，完成后才把对应审核值设为 <code>true</code>。</li>
+<li>再运行校验。成功后组包：</li>
+</ol>
+<pre><code class="language-powershell">py -3 .\prepare.py .\my-note.json --out .\practice-output
+</code></pre>
+<p>成功只表示本地包已经准备，不表示允许直接发布。再次使用同一输出目录会拒绝覆盖；请检查已有内容，或者选择新的练习目录。</p>
+<p>生成结果：</p>
+<pre><code class="language-text">practice-output/
+  发布包.txt
+  images/
+  manifest.json
+</code></pre>
+<p><code>manifest.json</code> 记录来源相对路径、复制后的文件、角色、哈希、计划时间、审核状态和未提交状态。以后接浏览器工具时，可用它作为字段比对依据。示例没有平台状态写回接口。</p>
+<h2>下一步怎样接实际工具</h2>
+<p>按照 <a href="#reproduce">从零复现指南</a> 先人工上传一条。之后可以为自己的审核工具和模型编写适配器，输入仍是同一种清单，不需要重写本地核验逻辑。</p>
+<p>实际使用的模型、浏览器工具、审核表权限和视觉检查要逐项验证；本地示例通过不能证明它们已经接通。本资料没有提供一键安装原生产系统的脚本。</p></article>
+<p class="foot">离线阅读版 · 不加载外部脚本或字体。示例源码位于随附 examples 目录。资料整理不代表原生产项目已开源或平台合规认证。</p>
+</main></div></body></html>
