@@ -2,42 +2,42 @@
 <title id="title">小红书内容制作流程</title>
 <desc id="desc">六步：飞书人工审核选题；Codex调用Antigravity写稿；Codex调用GPT生图；Codex整理并在Easel查看；Codex控制Chrome填发布页；人工审核并提交。</desc>
 <rect width="100%" height="100%" fill="white"/>
-<text x="60" y="72" font-family="Microsoft YaHei,sans-serif" font-size="48" font-weight="700" fill="#17212b">一篇小红书内容是这样做出来的</text>
-<text x="60" y="126" font-family="Microsoft YaHei,sans-serif" font-size="28" font-weight="400" fill="#45576a">每一步都写明：用什么工具，做什么，得到什么。</text>
+<text x="60" y="72" font-family="Microsoft YaHei,sans-serif" font-size="48" font-weight="700" fill="#17212b">内容生产与发布流程</text>
+<text x="60" y="126" font-family="Microsoft YaHei,sans-serif" font-size="28" font-weight="400" fill="#45576a">工具、处理步骤及各阶段的输出</text>
 <rect x="60" y="166" width="1080" height="192" rx="14" fill="#fff3dd" stroke="#cb9d42" stroke-width="2"/>
 <text x="88" y="220" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">1  选题｜飞书多维表格＋人工</text>
-<text x="88" y="278" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">我审核题目和资料，确定发布日期和时刻。</text>
-<text x="88" y="332" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：审核通过的选题</text>
+<text x="88" y="278" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">人工审核题目和资料，设置发布日期和时刻。</text>
+<text x="88" y="332" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：审核通过的选题</text>
 <path d="M570 370V420" stroke="#647b91" stroke-width="4"/><path d="M560 418L580 418L570 432Z" fill="#647b91"/>
 <text x="602" y="402" font-family="Microsoft YaHei,sans-serif" font-size="24" font-weight="400" fill="#45576a">选题和资料</text>
 <rect x="60" y="448" width="1080" height="192" rx="14" fill="#f3f7fb" stroke="#9bb0c5" stroke-width="2"/>
 <text x="88" y="502" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">2  写稿｜Codex 调用 Antigravity CLI</text>
 <text x="88" y="560" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">查资料，写平台文案和每页制图说明。</text>
-<text x="88" y="614" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：标题、正文、标签＋逐页文字和画面要求</text>
+<text x="88" y="614" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：标题、正文、标签＋逐页文字和画面要求</text>
 <path d="M570 652V702" stroke="#647b91" stroke-width="4"/><path d="M560 700L580 700L570 714Z" fill="#647b91"/>
 <text x="602" y="684" font-family="Microsoft YaHei,sans-serif" font-size="24" font-weight="400" fill="#45576a">文案和制图说明</text>
 <rect x="60" y="730" width="1080" height="192" rx="14" fill="#f3f7fb" stroke="#9bb0c5" stroke-width="2"/>
 <text x="88" y="784" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">3  做图｜Codex 调用 GPT 生图工具</text>
 <text x="88" y="842" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">先做封面，再逐张做其他页；检查物体和文字。</text>
-<text x="88" y="896" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：封面、内容页等独立图片文件</text>
+<text x="88" y="896" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：封面、内容页等独立图片文件</text>
 <path d="M570 934V984" stroke="#647b91" stroke-width="4"/><path d="M560 982L580 982L570 996Z" fill="#647b91"/>
 <text x="602" y="966" font-family="Microsoft YaHei,sans-serif" font-size="24" font-weight="400" fill="#45576a">图片文件</text>
 <rect x="60" y="1012" width="1080" height="192" rx="14" fill="#f3f7fb" stroke="#9bb0c5" stroke-width="2"/>
 <text x="88" y="1066" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">4  整理｜Codex＋本地脚本，Easel 查看</text>
 <text x="88" y="1124" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">图文配对，图片排序，按日期和篇目收好文件。</text>
-<text x="88" y="1178" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：一篇完整素材；在 Easel 查看内容和排期</text>
+<text x="88" y="1178" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：一篇完整素材；在 Easel 查看内容和排期</text>
 <path d="M570 1216V1266" stroke="#647b91" stroke-width="4"/><path d="M560 1264L580 1264L570 1278Z" fill="#647b91"/>
 <text x="602" y="1248" font-family="Microsoft YaHei,sans-serif" font-size="24" font-weight="400" fill="#45576a">文案、有序图片和时间</text>
 <rect x="60" y="1294" width="1080" height="192" rx="14" fill="#f3f7fb" stroke="#9bb0c5" stroke-width="2"/>
 <text x="88" y="1348" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">5  填页面｜Codex＋Chrome 浏览器扩展</text>
 <text x="88" y="1406" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">进入创作者中心，上传素材并填写发布表单。</text>
-<text x="88" y="1460" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：已经填好、尚未提交的编辑页面</text>
+<text x="88" y="1460" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：已经填好、尚未提交的编辑页面</text>
 <path d="M570 1498V1548" stroke="#647b91" stroke-width="4"/><path d="M560 1546L580 1546L570 1560Z" fill="#647b91"/>
 <text x="602" y="1530" font-family="Microsoft YaHei,sans-serif" font-size="24" font-weight="400" fill="#45576a">待人工审核的页面</text>
 <rect x="60" y="1576" width="1080" height="192" rx="14" fill="#fff3dd" stroke="#cb9d42" stroke-width="2"/>
 <text x="88" y="1630" font-family="Microsoft YaHei,sans-serif" font-size="36" font-weight="700" fill="#17212b">6  审核与发布｜人工</text>
-<text x="88" y="1688" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">我检查图文和设置，亲自点击发布或定时发布。</text>
-<text x="88" y="1742" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">得到：平台确认的发布或定时结果</text>
+<text x="88" y="1688" font-family="Microsoft YaHei,sans-serif" font-size="29" font-weight="400" fill="#17212b">人工检查图文和设置，提交发布或定时发布。</text>
+<text x="88" y="1742" font-family="Microsoft YaHei,sans-serif" font-size="27" font-weight="400" fill="#39536d">输出：平台确认的发布或定时结果</text>
 <text x="60" y="1838" font-family="Microsoft YaHei,sans-serif" font-size="28" font-weight="700" fill="#17212b">人工确认选题，人工最终发布；错误的文案或图片先修改。</text>
 <text x="60" y="1885" font-family="Microsoft YaHei,sans-serif" font-size="25" font-weight="400" fill="#45576a">视频可选：图卡＋文案 → Remotion 模板 → MP4 → 第 4 步</text>
 </svg>

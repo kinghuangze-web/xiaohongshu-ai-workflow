@@ -1,45 +1,46 @@
-# 本地教学示例：核验并整理一条内容
+# 本地内容包示例
 
-只使用 Python 标准库，不联网、不登录、不调用模型，不包含发布功能。它是重新编写的教学实现，不是原项目执行器。
+使用 Python 标准库检查输入清单和本地图片，生成待人工审核的内容包。不联网、不登录、不调用模型，不包含发布功能。
 
-## 它能做什么
+## 功能
 
-- 检查标题、正文、标签、完整时间与唯一页面角色。
-- 检查显式人工审核记录与本地 PNG/JPEG/WebP 素材文件头。
-- 计算文件 SHA-256，按清单顺序复制素材。
-- 输出发布包和待人工审核清单，始终记录 `submitted: false`。
-- 拒绝覆盖既有输出目录。
+- 校验标题、正文、标签、完整日期时间和页面角色。
+- 检查显式人工审核字段及 PNG/JPEG/WebP 文件头。
+- 计算 SHA-256，按清单顺序复制图片。
+- 生成发布包和素材清单，始终记录 `submitted: false`。
+- 拒绝覆盖已有输出目录。
 
-文件头检查不等于完整解码或视觉验收。脚本不会判断图中物体、事实、日期或编号是否正确；审核布尔值由人实际检查后填写。
+文件头检查不包含完整图片解码或视觉识别。事实、图中文字、物体结构、日期和编号需要人工检查，审核字段应反映实际检查结果。
 
-## 运行环境
+## 环境要求
 
-需要已安装的 Python 3.10 或更新版本。Windows 可先运行 `py --version`；没有 `py` 时用自己环境中的 `python`。安装来源、权限与路径按自己的设备选择。
+Python 3.10 或更新版本，无第三方依赖。以下命令在仓库根目录执行；Windows 也可使用 `py -3` 代替 `python`。
 
-在本 `examples` 文件夹打开终端：
-
-```powershell
-py -3 .\prepare.py .\sample.json
-```
-
-初次返回 `ok: false` 和退出码 2 是预期结果：示例故意没有图片，也没有人工审核通过，避免把假数据当成可发布内容。
-
-## 用自己的内容完成练习
-
-1. 复制 `sample.json` 为 `my-note.json`。
-2. 在 `assets` 文件夹放入自己的 PNG/JPEG/WebP 图，更新清单相对路径。不要使用别人的真实账号素材。
-3. 改成自己的编号、标题、正文、标签和完整时间。
-4. `expected_roles` 与素材角色一一对应。单图示例为 `cover`；多语言可改为 `cover, cn, jp, en, other, tail`。
-5. 逐项核实事实、素材身份与图片内容，完成后才把对应审核值设为 `true`。
-6. 再运行校验。成功后组包：
+## 校验默认输入
 
 ```powershell
-py -3 .\prepare.py .\my-note.json --out .\practice-output
+python examples/prepare.py examples/sample.json
 ```
 
-成功只表示本地包已经准备，不表示允许直接发布。再次使用同一输出目录会拒绝覆盖；请检查已有内容，或者选择新的练习目录。
+默认输入缺少图片，审核字段为 `false`，预期返回 `ok: false` 和退出码 `2`。
 
-生成结果：
+## 使用自定义输入
+
+1. 复制 `examples/sample.json` 为 `examples/my-note.json`。
+2. 在 `examples/assets` 放入图片，更新清单中的相对路径。
+3. 填写编号、标题、正文、标签和完整计划时间。
+4. `expected_roles` 与 `media` 中的角色和顺序保持一致。
+5. 人工检查事实、图片与封面信息后，将相应审核字段设为 `true`。
+6. 运行校验；需要组包时指定输出目录。
+
+```powershell
+python examples/prepare.py examples/my-note.json
+python examples/prepare.py examples/my-note.json --out examples/practice-output
+```
+
+输出目录必须不存在。组包成功只表示本地资料准备完成，后续仍需人工审核与平台提交。
+
+## 输出结构
 
 ```text
 practice-output/
@@ -48,10 +49,13 @@ practice-output/
   manifest.json
 ```
 
-`manifest.json` 记录来源相对路径、复制后的文件、角色、哈希、计划时间、审核状态和未提交状态。以后接浏览器工具时，可用它作为字段比对依据。示例没有平台状态写回接口。
+`manifest.json` 记录编号、计划时间、图片角色、来源相对路径、输出路径、SHA-256 和未提交状态：
 
-## 下一步怎样接实际工具
+```text
+production_status: PACKAGE_READY
+review_status: PENDING_FINAL_HUMAN_REVIEW
+platform_status: NOT_SUBMITTED
+submitted: false
+```
 
-按照 [从零复现指南](../02-从零复现指南.md) 先人工上传一条。之后可以为自己的审核工具和模型编写适配器，输入仍是同一种清单，不需要重写本地核验逻辑。
-
-实际使用的模型、浏览器工具、审核表权限和视觉检查要逐项验证；本地示例通过不能证明它们已经接通。本资料没有提供一键安装原生产系统的脚本。
+示例未集成飞书、文案生成、生图、Easel 或浏览器接口。完整工作流见[上手指南](../02-从零复现指南.md)。
